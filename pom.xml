@@ -107,14 +107,6 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-                <version>9.22.0</version>
-                <configuration>
-                    <!-- Tu peux laisser les valeurs par défaut et passer l'URL/creds via -D lors de l'exécution -->
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
