@@ -74,6 +74,11 @@
             <artifactId>spring-boot-starter-webmvc-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>9.22.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -100,6 +105,14 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>9.22.0</version>
+                <configuration>
+                    <!-- Tu peux laisser les valeurs par défaut et passer l'URL/creds via -D lors de l'exécution -->
                 </configuration>
             </plugin>
         </plugins>
