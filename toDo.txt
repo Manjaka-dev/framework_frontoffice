@@ -6,6 +6,7 @@ Tache frontOffice :
 Integer nb_passager
 String id_client
 String nom_hotel
+DateTIme date_reservation
 - creation de la fonction qui envoie la requette vers /reservations
 - creation de la fonction qui envoie la requette vers /reservations avec les données ( date )
 - affichage de la liste des reservation + ajout du formulaire de filtrage ( date )
