@@ -25,44 +25,40 @@ public class ReservationController {
     public String getReservations(Model model) {
         // TODO: Appeler l'API ${apiBaseUrl}/reservations
         // Pour l'instant, utilisation de données statiques
-        
+
         List<ReservationDTO> reservations = getStaticReservations();
         model.addAttribute("reservations", reservations);
-        
-        return "reservations";
+
+        return "reservations/list_reservation";
     }
 
     private List<ReservationDTO> getStaticReservations() {
         List<ReservationDTO> reservations = new ArrayList<>();
-        
+
         reservations.add(new ReservationDTO(
-            2,
-            "CLIENT001",
-            "Hotel Colbert",
-            Timestamp.valueOf("2026-02-10 14:30:00")
-        ));
-        
+                2,
+                "CLIENT001",
+                "Hotel Colbert",
+                Timestamp.valueOf("2026-02-10 14:30:00")));
+
         reservations.add(new ReservationDTO(
-            4,
-            "CLIENT002",
-            "Carlton Hotel",
-            Timestamp.valueOf("2026-02-15 10:00:00")
-        ));
-        
+                4,
+                "CLIENT002",
+                "Carlton Hotel",
+                Timestamp.valueOf("2026-02-15 10:00:00")));
+
         reservations.add(new ReservationDTO(
-            3,
-            "CLIENT003",
-            "Le Louvre Hotel",
-            Timestamp.valueOf("2026-02-20 16:45:00")
-        ));
-        
+                3,
+                "CLIENT003",
+                "Le Louvre Hotel",
+                Timestamp.valueOf("2026-02-20 16:45:00")));
+
         reservations.add(new ReservationDTO(
-            1,
-            "CLIENT004",
-            "Palissandre Hotel",
-            Timestamp.valueOf("2026-02-25 09:15:00")
-        ));
-        
+                1,
+                "CLIENT004",
+                "Palissandre Hotel",
+                Timestamp.valueOf("2026-02-25 09:15:00")));
+
         return reservations;
     }
 }
