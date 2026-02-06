@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout (title, content)">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">FrontOffice</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <h1 class="logo">FrontOffice</h1>
+                <ul class="nav-menu">
+                    <li><a th:href="@{/}">Accueil</a></li>
+                    <li><a th:href="@{/reservations}">Réservations</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div th:replace="${content}"></div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 FrontOffice - Tous droits réservés</p>
+        </div>
+    </footer>
+</body>
+
+</html>

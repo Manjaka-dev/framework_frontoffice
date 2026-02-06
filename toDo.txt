@@ -1,0 +1,13 @@
+TL: ETU003102 Manjaka
+Dev frontoffice: ETU003231 Nekena
+Tache à faire:
+Tache frontOffice :
+- creation ReservationDTO.java:
+Integer nb_passager
+String id_client
+String nom_hotel
+TimeStamp date_reservation
+- creation de la fonction qui envoie la requette vers /reservations
+- creation de la fonction qui envoie la requette vers /reservations avec les données ( date )
+- affichage de la liste des reservation + ajout du formulaire de filtrage ( date )
+- affichage de la nouvelle liste quand on clique sur rechercher
