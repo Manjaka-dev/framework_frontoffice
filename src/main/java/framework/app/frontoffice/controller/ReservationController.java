@@ -6,10 +6,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/reservations")
@@ -22,11 +26,23 @@ public class ReservationController {
     private static final String RESERVATIONS_ENDPOINT = "/reservations";
 
     @GetMapping
-    public String getReservations(Model model) {
-        // TODO: Appeler l'API ${apiBaseUrl}/reservations
-        // Pour l'instant, utilisation de données statiques
+    public String getReservations(
+            @RequestParam(required = false) String date_reservation,
+            Model model) {
 
-        List<ReservationDTO> reservations = getStaticReservations();
+        List<ReservationDTO> reservations;
+
+        if (date_reservation != null && !date_reservation.isEmpty()) {
+            // TODO: Appeler l'API
+            // ${apiBaseUrl}/reservations?date_reservation={date_reservation}
+            // Pour l'instant, utilisation de données statiques filtrées
+            reservations = getStaticReservationsByDate(date_reservation);
+        } else {
+            // TODO: Appeler l'API ${apiBaseUrl}/reservations
+            // Pour l'instant, utilisation de données statiques
+            reservations = getStaticReservations();
+        }
+
         model.addAttribute("reservations", reservations);
 
         return "reservations/list_reservation";
@@ -60,5 +76,27 @@ public class ReservationController {
                 Timestamp.valueOf("2026-02-25 09:15:00")));
 
         return reservations;
+    }
+
+    private List<ReservationDTO> getStaticReservationsByDate(String dateString) {
+        List<ReservationDTO> allReservations = getStaticReservations();
+
+        try {
+            // Convertir la date string en LocalDate
+            LocalDate filterDate = LocalDate.parse(dateString);
+
+            // Filtrer les réservations par date
+            return allReservations.stream()
+                    .filter(reservation -> {
+                        LocalDateTime reservationDateTime = reservation
+                                .getDate_reservation()
+                                .toLocalDateTime();
+                        return reservationDateTime.toLocalDate().equals(filterDate);
+                    })
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            // En cas d'erreur de parsing, retourner toutes les réservations
+            return allReservations;
+        }
     }
 }
