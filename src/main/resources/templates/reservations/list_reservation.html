@@ -41,7 +41,7 @@
                         <td th:text="${reservation.id_client}"></td>
                         <td th:text="${reservation.nom_hotel}"></td>
                         <td th:text="${reservation.nb_passager}"></td>
-                        <td th:text="${#dates.format(reservation.date_reservation, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td th:text="${#temporals.format(reservation.date_reservation, 'dd/MM/yyyy HH:mm')}"></td>
                     </tr>
                 </tbody>
             </table>

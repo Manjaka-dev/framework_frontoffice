@@ -1,17 +1,17 @@
 package framework.app.frontoffice.dto;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class ReservationDTO {
     private Integer nb_passager;
     private String id_client;
     private String nom_hotel;
-    private Timestamp date_reservation;
+    private LocalDateTime date_reservation;
 
     public ReservationDTO() {
     }
 
-    public ReservationDTO(Integer nb_passager, String id_client, String nom_hotel, Timestamp date_reservation) {
+    public ReservationDTO(Integer nb_passager, String id_client, String nom_hotel, LocalDateTime date_reservation) {
         this.nb_passager = nb_passager;
         this.id_client = id_client;
         this.nom_hotel = nom_hotel;
@@ -42,11 +42,11 @@ public class ReservationDTO {
         this.nom_hotel = nom_hotel;
     }
 
-    public Timestamp getDate_reservation() {
+    public LocalDateTime getDate_reservation() {
         return date_reservation;
     }
 
-    public void setDate_reservation(Timestamp date_reservation) {
+    public void setDate_reservation(LocalDateTime date_reservation) {
         this.date_reservation = date_reservation;
     }
 }

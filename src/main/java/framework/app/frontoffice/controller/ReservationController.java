@@ -1,23 +1,28 @@
 package framework.app.frontoffice.controller;
 
 import framework.app.frontoffice.dto.ReservationDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/reservations")
 public class ReservationController {
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Value("${api.base.url}")
     private String apiBaseUrl;
@@ -31,73 +36,40 @@ public class ReservationController {
             Model model) {
 
         List<ReservationDTO> reservations;
-            
-        // on regarde si la requete contient une date de reservation
-        if (date_reservation != null && !date_reservation.isEmpty()) {
-            // TODO: Appeler l'API
-            // ${apiBaseUrl}/reservations?date_reservation={date_reservation}
-            // Pour l'instant, utilisation de données statiques filtrées
-            reservations = getStaticReservationsByDate(date_reservation);
-        } else {
-            // TODO: Appeler l'API ${apiBaseUrl}/reservations
-            // Pour l'instant, utilisation de données statiques
-            reservations = getStaticReservations();
+
+        try {
+            // Construction de l'URL avec ou sans paramètre de date
+            String url = apiBaseUrl + RESERVATIONS_ENDPOINT;
+
+            if (date_reservation != null && !date_reservation.isEmpty()) {
+                // Appel API avec filtre de date :
+                // ${apiBaseUrl}/reservations?date_reservation={date_reservation}
+                url = UriComponentsBuilder.fromUriString(url)
+                        .queryParam("date_reservation", date_reservation)
+                        .toUriString();
+            }
+
+            // Appel de l'API
+            ResponseEntity<List<ReservationDTO>> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<List<ReservationDTO>>() {
+                    });
+
+            reservations = response.getBody();
+            if (reservations == null) {
+                reservations = new ArrayList<>();
+            }
+        } catch (Exception e) {
+            // En cas d'erreur lors de l'appel API, retourner une liste vide
+            reservations = new ArrayList<>();
+            // TODO: Logger l'erreur
+            e.printStackTrace();
         }
 
         model.addAttribute("reservations", reservations);
 
         return "reservations/list_reservation";
-    }
-
-    private List<ReservationDTO> getStaticReservations() {
-        List<ReservationDTO> reservations = new ArrayList<>();
-
-        reservations.add(new ReservationDTO(
-                2,
-                "CLIENT001",
-                "Hotel Colbert",
-                Timestamp.valueOf("2026-02-10 14:30:00")));
-
-        reservations.add(new ReservationDTO(
-                4,
-                "CLIENT002",
-                "Carlton Hotel",
-                Timestamp.valueOf("2026-02-15 10:00:00")));
-
-        reservations.add(new ReservationDTO(
-                3,
-                "CLIENT003",
-                "Le Louvre Hotel",
-                Timestamp.valueOf("2026-02-20 16:45:00")));
-
-        reservations.add(new ReservationDTO(
-                1,
-                "CLIENT004",
-                "Palissandre Hotel",
-                Timestamp.valueOf("2026-02-25 09:15:00")));
-
-        return reservations;
-    }
-
-    private List<ReservationDTO> getStaticReservationsByDate(String dateString) {
-        List<ReservationDTO> allReservations = getStaticReservations();
-
-        try {
-            // Convertir la date string en LocalDate
-            LocalDate filterDate = LocalDate.parse(dateString);
-
-            // Filtrer les réservations par date
-            return allReservations.stream()
-                    .filter(reservation -> {
-                        LocalDateTime reservationDateTime = reservation
-                                .getDate_reservation()
-                                .toLocalDateTime();
-                        return reservationDateTime.toLocalDate().equals(filterDate);
-                    })
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            // En cas d'erreur de parsing, retourner toutes les réservations
-            return allReservations;
-        }
     }
 }
