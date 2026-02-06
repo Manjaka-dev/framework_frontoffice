@@ -31,7 +31,8 @@ public class ReservationController {
             Model model) {
 
         List<ReservationDTO> reservations;
-
+            
+        // on regarde si la requete contient une date de reservation
         if (date_reservation != null && !date_reservation.isEmpty()) {
             // TODO: Appeler l'API
             // ${apiBaseUrl}/reservations?date_reservation={date_reservation}
